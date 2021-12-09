@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  title: 'Production Environment Heading',
+  apiUrl: ''
 };

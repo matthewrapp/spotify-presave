@@ -1,0 +1,41 @@
+<div class="container">
+    <h2 class="text-center mt-3">Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="loginUser()">
+        <!-- EMAIL -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" formControlName="email" class="form-control" id="email" autocomplete="email">
+        </div>
+        <!-- Errors for email -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors && loginForm.get('email')?.hasError('required')">
+            Email address is required.
+        </div>
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors && loginForm.get('email')?.hasError('email')">
+            Must enter proper email address.
+        </div>
+        <!-- End errors for email -->
+        <!-- END EMAIL -->
+
+        <!-- PASSWORD -->
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" formControlName="password" class="form-control" id="password" autocomplete="current-password" >
+        </div>
+        <!-- Errors for password -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
+            Password is required.
+        </div>
+        <!-- End errors for password -->
+        <!-- END PASSWORD -->
+
+        <!-- ERRORS FROM THE SERVER -->
+        <div class="mb-3 alert alert-danger" *ngIf="errors">
+            {{ errorMsg }}
+        </div>
+        <!-- END ERRORS FROM THE SERVER -->
+        <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid" >Login</button>
+    </form>
+</div>

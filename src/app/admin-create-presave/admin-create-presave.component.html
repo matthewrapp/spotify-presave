@@ -1,0 +1,74 @@
+<div class="container" *ngIf="!noArtists">
+    <h2 class="text-center mt-3">Create Presave Campaign</h2>
+    <form [formGroup]="createPresaveForm" (ngSubmit)="createPresave()">
+        <!-- SONG NAME -->
+        <div class="mb-3">
+            <label for="songName" class="form-label">Song Name</label>
+            <input type="text" formControlName="songName" class="form-control" id="songName">
+        </div>
+        <!-- Errors for songName -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="createPresaveForm.get('songName')?.touched && createPresaveForm.get('songName')?.errors && createPresaveForm.get('songName')?.hasError('required')">
+            Song name is required.
+        </div>
+        <!-- End errors for songName-->
+        <!-- END SONG NAME-->
+
+        <!-- ARTIST NAME -->
+        <div class="mb-3">
+            <label for="artistId" class="form-label">Artist Name</label>
+            <!-- <input type="text" formControlName="artistName" class="form-control" id="artistName"> -->
+            <select class="form-select" aria-label="Default select example" formControlName="artistId" id="artistId">
+                <option selected disabled>Choose Artist</option>
+                <option *ngFor="let artist of artists;" value="{{artist._id}}" >{{artist.artistName}}</option>
+            </select>
+        </div>
+        <!-- Errors for artist name -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="createPresaveForm.get('artistId')?.touched && createPresaveForm.get('artistId')?.errors && createPresaveForm.get('artistId')?.hasError('required')">
+            Artist name is required.
+        </div>
+        <!-- End errors for artist name-->
+        <!-- END ARTIST NAME-->
+
+        <!-- RELEASE DATE -->
+        <div class="mb-3">
+            <label for="releaseDate" class="form-label">Release Date</label>
+            <input type="date" formControlName="releaseDate" class="form-control" id="releaseDate">
+        </div>
+        <!-- Errors for releaseDate -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="createPresaveForm.get('releaseDate')?.touched && createPresaveForm.get('releaseDate')?.errors && createPresaveForm.get('releaseDate')?.hasError('required')">
+            Release Date is required
+        </div>
+        <!-- End errors for releaseDate-->
+        <!-- RELEASE DATE-->
+
+        <!-- ARTWORK URL -->
+        <div class="mb-3">
+            <label for="artworkUrl" class="form-label">Artwork URL</label>
+            <input type="text" formControlName="artworkUrl" class="form-control" id="artworkUrl">
+        </div>
+        <!-- Errors for releaseDate -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="createPresaveForm.get('artworkUrl')?.touched && createPresaveForm.get('artworkUrl')?.errors && createPresaveForm.get('artworkUrl')?.hasError('pattern')">
+            Artwrok must be a proper url.
+        </div>
+        <!-- End errors for releaseDate-->
+        <!-- ARTWORK URL -->
+
+         <!-- SPOTIFY URI -->
+         <div class="mb-3">
+            <label for="spotifyUri" class="form-label">Spotify URI</label>
+            <input type="text" formControlName="spotifyUri" class="form-control" id="spotifyUri">
+        </div>
+        <!-- Errors for releaseDate -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="createPresaveForm.get('spotifyUri')?.touched && createPresaveForm.get('spotifyUri')?.errors && createPresaveForm.get('spotifyUri')?.hasError('required')">
+            Spotify URI is required.
+        </div>
+        <!-- End errors for releaseDate-->
+        <!-- SPOTIFY URI-->
+        <button type="submit" class="btn btn-primary" [disabled]="!createPresaveForm.valid" >Create Presave</button>
+    </form>
+</div>

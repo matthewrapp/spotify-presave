@@ -1,0 +1,18 @@
+<div class="container">
+    <div *ngIf="!noSongData; else elseBlock;" class="card text-center mx-auto mt-3 border-0" style="max-width: 22rem;">
+        <img [src]="songData?.artworkUrl" class="card-img-top" alt="...">
+        <div class="card-body border-bottom">
+            <h5 class="card-title">{{ songData?.songName }}</h5>
+            <p class="card-text text-secondary">
+                Release Date: {{ songData?.releaseDate | date: "EEE • MMMM dd, YYYY"}}
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <br />
+            <li class="list-group-item border-0">
+                <button type="button" (click)="requestSpotifyCode()">Presave</button>
+            </li>
+        </ul>
+    </div>
+    <ng-template #elseBlock></ng-template>
+</div>

@@ -1,0 +1,84 @@
+<div class="container">
+    <h2 class="text-center mt-3">Sign Up</h2>
+    <form [formGroup]="signupForm" (ngSubmit)="createUser()">
+        <!-- EMAIL -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" formControlName="email" class="form-control" id="email" autocomplete="email">
+        </div>
+        <!-- Errors for email -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.errors && signupForm.get('email')?.hasError('required')">
+            Email address is required.
+        </div>
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.errors && signupForm.get('email')?.hasError('email')">
+            Must enter proper email address.
+        </div>
+        <!-- End errors for email -->
+        <!-- END EMAIL -->
+
+        <!-- FIRST NAME -->
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" formControlName="firstName" class="form-control" id="firstName" autocomplete="given-name">
+        </div>
+        <!-- Errors for first name -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="signupForm.get('firstName')?.touched && signupForm.get('firstName')?.errors && signupForm.get('firstName')?.hasError('required')">
+            First name is required.
+        </div>
+        <!-- End errors for first name-->
+        <!-- END FIRST NAME -->
+
+        <!-- LAST NAME -->
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" formControlName="lastName" class="form-control" id="lastName" autocomplete="family-name">
+        </div>
+        <!-- Errors for last name -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="signupForm.get('lastName')?.touched && signupForm.get('lastName')?.errors && signupForm.get('lastName')?.hasError('required')">
+            Last name is required.
+        </div>
+        <!-- End errors for last name-->
+        <!-- END LAST NAME-->
+
+        <!-- PASSWORD -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" formControlName="password" class="form-control" id="password" autocomplete="current-password" >
+        </div>
+        <!-- Errors for password -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.hasError('required')">
+            Password is required.
+        </div>
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.hasError('minlength')">
+            Password needs a minimum 8 characters.
+        </div>
+        <!-- End errors for password -->
+        <!-- END PASSWORD -->
+
+        <!-- ARTIST NAME -->
+        <div class="mb-3">
+            <label for="artistName" class="form-label">Artist Name</label>
+            <input type="text" formControlName="artistName" class="form-control" id="artistName">
+        </div>
+        <!-- Errors for artist name -->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="signupForm.get('artistName')?.touched && signupForm.get('password')?.hasError('minlength')">
+            Password needs a minimum 2 character.
+        </div>
+        <!-- End errors for artist name -->
+        <!-- ARTIST NAME-->
+
+        <!-- ERRORS FROM THE SERVER -->
+        <div class="mb-3 alert alert-danger" *ngIf="errors">
+            {{ errorMsg }}
+        </div>
+        <!-- END ERRORS FROM THE SERVER -->
+        <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid" >Sign Up</button>
+    </form>
+</div>

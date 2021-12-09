@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  title: 'Local Environment Heading',
+  apiUrl: 'http://localhost:3000',
+  SPOTIFY_CLIENT_ID: 'bfa008a9f4b446529a8b7adae40603b9',
+  SPOTIFY_CLIENT_SECRET: 'ee66b79c44d147b294f488d7f22b6060'
+
 };
 
 /*

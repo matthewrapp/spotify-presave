@@ -1,0 +1,36 @@
+<div id="sidebar-wrapper"  [ngClass]="sidebarStatus ? 'hide' : 'show border-right bg-light'">
+    <div class="sidebar-heading"> {{brandName}} </div>
+    <div class="list-group list-group-flush">
+      <a href="/admin/dashboard" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+      <a href="/admin/songs" class="list-group-item list-group-item-action bg-light">Songs</a>
+      <a href="/admin/profile" class="list-group-item list-group-item-action bg-light">Profile</a>
+    </div>
+</div>
+
+<!-- <div id="content" [ngClass]="hideToggle ? 'd-none' : ''">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-info">
+                <i class="fas fa-align-left"></i>
+                <span>Toggle Sidebar</span>
+            </button>
+
+        </div>
+    </nav>
+</div>
+
+<nav id="sidebar" [ngClass]="hideSidebar ? 'd-none' : ''">
+    <div class="sidebar-header">
+        <h3>{{ brandName }}</h3>
+    </div>
+
+    <ul class="sidebar-list">
+        <li class="active">
+            <a href="#">About</a>
+        </li>
+        <li>
+            <a href="#">About</a>
+        </li>
+    </ul>
+</nav> -->

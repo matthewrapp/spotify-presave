@@ -1,0 +1,28 @@
+<div class="container">
+    <div *ngIf="!noSongs; else elseBlock;" class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th style="width: 3%" scope="col">#</th>
+                    <th style="width: 5%" scope="col">Artwork</th>
+                    <th style="width: 27%" scope="col">Song Name</th>
+                    <th style="width: 45%" scope="col">Release Date</th>
+                    <th style="width: 20%"scope="col">Edit/Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let song of songs; let i = index" [attr.data-index]="i">
+                    <th scope="row">{{i + 1}}</th>
+                    <td class="text-center"><img class="img-fluid w-75"  [src]="song.artworkUrl"></td>
+                    <td>{{ song.songName }}</td>
+                    <td>{{ song.releaseDate | date: "EEE • MMMM dd, YYYY" }}</td>
+                    <td>
+                        <button class="btn btn-primary mr-2">Edit</button>
+                        <button class="btn btn-danger ml-2" (click)="deleteSong(song._id)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <ng-template #elseBlock>No Songs Yet!</ng-template>
+</div>
