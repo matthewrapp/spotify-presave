@@ -68,8 +68,8 @@
         </div>
         <!-- Errors for artist name -->
         <div class="mb-3 alert alert-danger" 
-            *ngIf="signupForm.get('artistName')?.touched && signupForm.get('password')?.hasError('minlength')">
-            Password needs a minimum 2 character.
+            *ngIf="signupForm.get('artistName')?.touched && signupForm.get('artistName')?.hasError('minlength')">
+            Artist name needs a minimum 2 character.
         </div>
         <!-- End errors for artist name -->
         <!-- ARTIST NAME-->
