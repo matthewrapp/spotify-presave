@@ -13,7 +13,9 @@ import { Song } from '../models/song.model';
 })
 export class SongService implements OnInit {
     getSongsResEvent = new Subject<any>();
+    getSongResEvent = new Subject<any>();
     presaveCreateResEvent = new Subject<any>();
+    presaveUpdatedResEvent = new Subject<any>();
     getSongDataResEvent = new Subject<any>();
     songDeletedResEvent = new Subject<any>();
     response: any = { res: null, status: null }
@@ -39,6 +41,25 @@ export class SongService implements OnInit {
                     this.response.res = error;
                     this.response.status = error.status;
                     this.getSongsResEvent.next(this.response);
+                }
+            })
+    }
+
+    getSong(songId: string) {
+        const authToken = this.authService.getCookie('auth');
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
+
+        this.http.get<any>(`${environment.apiUrl}/songs/${songId}`, { headers: headers,  withCredentials: true  })
+            .subscribe({
+                next: resData => {
+                    this.response.res = resData;
+                    this.response.status = 200;
+                    this.getSongResEvent.next(this.response);
+                },
+                error: error => {
+                    this.response.res = error;
+                    this.response.status = error.status;
+                    this.getSongResEvent.next(this.response);
                 }
             })
     }
@@ -76,6 +97,26 @@ export class SongService implements OnInit {
                     this.response.res = error;
                     this.response.status = error.status;
                     this.songDeletedResEvent.next(this.response);
+                }
+            })
+    }
+
+    updatePresave(songToUpdate: Song, songId: string) {
+        if (!songToUpdate) return;
+        const authToken = this.authService.getCookie('auth');
+        const headers =  new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
+
+        this.http.put<any>(`${environment.apiUrl}/songs/${songId}`, songToUpdate, { headers: headers})
+            .subscribe({
+                next: resData => {
+                    this.response.res = resData;
+                    this.response.status = 200;
+                    this.presaveUpdatedResEvent.next(this.response);
+                },
+                error: error => {
+                    this.response.res = error;
+                    this.response.status = error.status;
+                    this.presaveUpdatedResEvent.next(this.response);
                 }
             })
     }

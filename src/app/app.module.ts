@@ -3,6 +3,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { CookieService } from 'ngx-cookie-service';
 
@@ -10,7 +11,7 @@ import { AppComponent } from './app.component';
 import { AdminSignupComponent } from './admin-signup/admin-signup.component';
 import { AdminLoginComponent } from './admin-login/admin-login.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { SidebarComponent } from './navbar/navbar.component';
 import { AdminSongsComponent } from './admin-songs/admin-songs.component';
 import { AdminCreatePresaveComponent } from './admin-create-presave/admin-create-presave.component';
 import { UserLandingComponent } from './user-landing/user-landing.component';
@@ -34,7 +35,8 @@ import { SpotifyCallbackComponent } from './spotify-callback/spotify-callback.co
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]

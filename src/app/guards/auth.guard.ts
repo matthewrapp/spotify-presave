@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
     // if cookie isn't found, return false
     if (!cookieVal) return false;
     // if cookie is found, return true
+    // should go to server and validate token first
     return true
   }
   

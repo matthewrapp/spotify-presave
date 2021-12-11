@@ -1,13 +1,15 @@
 <div class="container">
-    <div *ngIf="!noSongs; else elseBlock;" class="table-responsive">
+    <div *ngIf="!noSongs; else elseBlock;" class="table-responsive mt-3">
         <table class="table align-middle">
             <thead>
                 <tr>
                     <th style="width: 3%" scope="col">#</th>
                     <th style="width: 5%" scope="col">Artwork</th>
-                    <th style="width: 27%" scope="col">Song Name</th>
-                    <th style="width: 45%" scope="col">Release Date</th>
-                    <th style="width: 20%"scope="col">Edit/Delete</th>
+                    <th style="width: 19%" scope="col">Song Name</th>
+                    <th style="width: 23%" scope="col">Artist Name</th>
+                    <th style="width: 30%" scope="col">Release Date</th>
+                    <th style="width: 10%" scope="col">Presaves</th>
+                    <th style="width: 15%"scope="col">Edit/Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,10 +17,12 @@
                     <th scope="row">{{i + 1}}</th>
                     <td class="text-center"><img class="img-fluid w-75"  [src]="song.artworkUrl"></td>
                     <td>{{ song.songName }}</td>
+                    <td>{{ artist.artistName }}</td>
                     <td>{{ song.releaseDate | date: "EEE • MMMM dd, YYYY" }}</td>
-                    <td>
-                        <button class="btn btn-primary mr-2">Edit</button>
-                        <button class="btn btn-danger ml-2" (click)="deleteSong(song._id)">Delete</button>
+                    <td>{{ song.presaved.length }}</td>
+                    <td class="">
+                        <button class="btn text-secondary float-end" [routerLink]="['edit/', song._id]"><fa-icon [icon]="faEdit"></fa-icon></button>
+                        <button class="btn text-danger float-end" (click)="deleteSong(song._id)"><fa-icon [icon]="faDelete"></fa-icon></button>
                     </td>
                 </tr>
             </tbody>

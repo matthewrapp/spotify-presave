@@ -19,6 +19,7 @@ const appRoutes: Routes = [
     { path: 'dashboard', component: AdminDashboardComponent, canActivate: [AuthGuard] }, // take you to '/login' is not authed}
     { path: 'songs', component: AdminSongsComponent, canActivate: [AuthGuard] }, // take you to '/login' is not authed}
     { path: 'create-presave', component: AdminCreatePresaveComponent, canActivate: [AuthGuard] }, // take you to '/login' is not authed}
+    { path: 'songs/edit/:songId', component: AdminCreatePresaveComponent, canActivate: [AuthGuard] }, // take you to '/login' is not authed}
   ]},
   { path: ':artistName/s/:songName', component: UserLandingComponent },
   { path: ':callback', component: SpotifyCallbackComponent },

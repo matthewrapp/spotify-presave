@@ -1,20 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 import { Song } from '../models/song.model';
 import { Artist } from '../models/artist.model';
 import { ArtistService } from '../services/artist.service';
 import { SongService } from '../services/song.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'sp-admin-create-presave',
   templateUrl: './admin-create-presave.component.html',
   styleUrls: ['./admin-create-presave.component.css']
 })
-export class AdminCreatePresaveComponent implements OnInit {
+export class AdminCreatePresaveComponent implements OnInit, OnDestroy {
   errors: boolean = false;
   errorMsg: string = '';
+  editMode!: Boolean;
+  songToEdit!: any;
+  getSongSubscription!: Subscription;
+  presaveCreatedSubscrition!: Subscription;
+  presaveUpdatedSubscription!: Subscription;
   artists!: [any];
   noArtists!: Boolean;
   createPresaveForm!: FormGroup;
@@ -22,6 +29,29 @@ export class AdminCreatePresaveComponent implements OnInit {
   constructor(private songService: SongService, private artistService: ArtistService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      if (params['songId']) {
+        this.getSongToEdit(params['songId']);
+        return this.editMode = true;
+      }
+      return this.editMode = false;
+    })
+
+    this.getAdminArtists();
+
+    if (this.editMode) return
+    else this.initForm();
+  }
+
+  getSongToEdit(songId: string) {
+    this.songService.getSong(songId);
+    this.getSongSubscription = this.songService.getSongResEvent.subscribe(result => {
+      this.songToEdit = result.res.song;
+      return this.initForm();
+    })
+  };
+
+  getAdminArtists() {
     this.artistService.getArtists();
     this.artistService.artistsChangedResEvent.subscribe(result => {
       const fetchedArtists = result.res.artists;
@@ -30,25 +60,37 @@ export class AdminCreatePresaveComponent implements OnInit {
 
       this.noArtists = false;
       this.artists = fetchedArtists;
-
-      this.initForm();
       return
     })
-
-    return this.initForm();
   }
 
-  createPresave(){
-    const songName = this.createPresaveForm.value.songName;
-    const releaseDate = this.createPresaveForm.value.releaseDate;
-    const artworkUrl = this.createPresaveForm.value.artworkUrl ? this.createPresaveForm.value.artworkUrl : '';
-    const spotifyUri = this.createPresaveForm.value.spotifyUri;
-    const artistId = this.createPresaveForm.value.artistId;
+  updatePresave() {
+    const { songName, releaseDate, artworkUrl } = this.createPresaveForm.value;
+    // non-editable fields
+    const { spotifyUri, artist } = this.songToEdit;
+    const presave = new Song(songName, releaseDate, artworkUrl ? artworkUrl : '', spotifyUri, artist);
 
-    const newSong = new Song(songName, releaseDate, artworkUrl, spotifyUri, artistId);
+    this.songService.updatePresave(presave, this.songToEdit._id);
+    this.presaveUpdatedSubscription = this.songService.presaveUpdatedResEvent.subscribe(result => {
+      if (result.status !== 200) {
+        this.errors = true;
+        this.errorMsg = result.res.error.message;
+        return
+      }
 
-    this.songService.writePresave(newSong);
-    this.songService.presaveCreateResEvent.subscribe(result => {
+      this.errors = false;
+      this.errorMsg = '';
+      this.router.navigate(['/admin/songs']);
+    })
+  }
+
+  submitPresave() {
+    const { songName, releaseDate, artworkUrl, spotifyUri, artist } = this.createPresaveForm.value;
+    const presave = new Song(songName, releaseDate, artworkUrl ? artworkUrl : '', spotifyUri, artist);
+
+    this.songService.writePresave(presave);
+
+    this.presaveCreatedSubscrition = this.songService.presaveCreateResEvent.subscribe(result => {
         if (result.status !== 200) {
           this.errors = true;
           this.errorMsg = result.res.error.message;
@@ -61,14 +103,26 @@ export class AdminCreatePresaveComponent implements OnInit {
     })
   }
 
-  private initForm() {
-    this.createPresaveForm = new FormGroup({
-      'songName': new FormControl('', [Validators.required]),
-      'artistId': new FormControl('', Validators.required),
-      'releaseDate': new FormControl('', Validators.required),
-      'artworkUrl': new FormControl('', Validators.pattern(/(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/i)),
-      'spotifyUri': new FormControl('', [Validators.required])
-    })
+  ngOnDestroy(): void {
+    if (this.getSongSubscription) this.getSongSubscription.unsubscribe();
+    if (this.presaveCreatedSubscrition) this.presaveCreatedSubscrition.unsubscribe();
   }
 
+  private async initForm() {
+    if (this.editMode) {
+      return this.createPresaveForm = new FormGroup({
+        'songName': new FormControl(this.songToEdit?.songName, [Validators.required]),
+        'releaseDate': new FormControl(formatDate(this.songToEdit?.releaseDate, 'yyyy-MM-dd', 'en'), Validators.required),
+        'artworkUrl': new FormControl(this.songToEdit?.artworkUrl, Validators.pattern(/(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/i)),
+      })
+    } else {
+      return this.createPresaveForm = new FormGroup({
+        'songName': new FormControl('', [Validators.required]),
+        'artistId': new FormControl('', Validators.required),
+        'releaseDate': new FormControl('', Validators.required),
+        'artworkUrl': new FormControl('', Validators.pattern(/(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/i)),
+        'spotifyUri': new FormControl('', [Validators.required])
+      })
+    }
+    }
 }

@@ -1,0 +1,60 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+      <!-- Navbar brand -->
+      <a class="navbar-brand me-2" href="#">{{ brandName }}</a>
+  
+      <!-- Toggle button -->
+      <button class="navbar-toggler" type="button" (click)="toggleNav()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <!-- Collapsible wrapper -->
+      <div [ngClass]="navCollapsed ? 'collapse' : ''" class="navbar-collapse">
+        <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-lg-0">
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/songs">Songs</a>
+          </li>
+        </ul>
+        <!-- Left links -->
+  
+        <div class="nav-cta-btn-group">
+          <a href="/login" class="btn btn-link login"> Login <fa-icon [icon]="faSignIn"></fa-icon></a>
+          <a href="/signup" class="btn btn-link signup">Sign Up</a>
+          <button (click)="logoutUser()" type="button" class="btn btn-link logout">Logout</button>
+        </div>
+      </div>
+      <!-- Collapsible wrapper -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+
+
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">{{brandName}}</a>
+        <button class="navbar-toggler" (click)="toggleNav()" type="button">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div [ngClass]="navCollapsed ? 'collapse' : ''" class="navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a href="/admin/dashboard" class="nav-link active" aria-current="page">Dashboard</a>
+            <a href="/admin/songs" class="nav-link" href="#">Songs</a>
+            <a href="/admin/profile" class="nav-link" href="#">Profile</a>
+        </div>
+        </div>
+    </div>
+</nav> -->
+
+<!-- <div class="sidebar-heading"> {{brandName}} </div>
+<div class="list-group list-group-flush mt-2">
+    <a href="/admin/dashboard" class="list-group-item list-group-item-action mt-2 bg-light">Dashboard</a>
+    <a href="/admin/songs" class="list-group-item list-group-item-action mt-2 bg-light">Songs</a>
+    <a href="/admin/profile" class="list-group-item list-group-item-action mt-2 bg-light">Profile</a>
+</div> -->

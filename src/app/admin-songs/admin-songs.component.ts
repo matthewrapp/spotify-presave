@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { Song } from '../models/song.model';
 import { AuthService } from '../services/auth.service';
@@ -11,7 +12,10 @@ import { SongService } from '../services/song.service';
   styleUrls: ['./admin-songs.component.css']
 })
 export class AdminSongsComponent implements OnInit, OnDestroy {
+  faEdit = faEdit;
+  faDelete = faTrash;
   songs!: [any]
+  artist!: any
   noSongs!: Boolean;
   getSongsSubscription!: Subscription;
   deleteSongSubscription!: Subscription;
@@ -29,6 +33,7 @@ export class AdminSongsComponent implements OnInit, OnDestroy {
       if (result.res.songs.length <= 0) return this.noSongs = true;
       this.noSongs = false;
       this.songs = result.res.songs;
+      this.artist = result.res.artist;
       return
     })
   }
@@ -43,8 +48,9 @@ export class AdminSongsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getSongsSubscription.unsubscribe();
-    this.deleteSongSubscription.unsubscribe();
+    if (this.getSongsSubscription) this.getSongsSubscription.unsubscribe();
+    if (this.deleteSongSubscription) this.deleteSongSubscription.unsubscribe();
+    
   }
 
 }

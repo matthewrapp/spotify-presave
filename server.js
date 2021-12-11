@@ -81,9 +81,9 @@ mongoose.connect('mongodb://localhost:27017/spotify-presave', {useNewUrlParser :
 });
 
 // Tell express to map all other non-defined routes back to the index page
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/sp/index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'dist/sp/index.html'));
+// });
 
 // Define the port address and tell express to use this port
 const port = process.env.PORT;

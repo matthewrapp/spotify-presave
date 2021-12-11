@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AdminService } from '../services/admin.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'sp-admin-login',
@@ -13,10 +14,11 @@ export class AdminLoginComponent implements OnInit {
   errorMsg: string = '';
   loginForm!: FormGroup;
 
-  constructor(private adminService: AdminService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private adminService: AdminService, private route: ActivatedRoute, private router: Router, private authService: AuthService) { }
 
-  ngOnInit(): void {
-    this.initForm();
+  ngOnInit() {
+    if (this.authService.getIsLoggedIn()) return this.router.navigate(['/admin/songs']);
+    return this.initForm();
   }
 
   loginUser() {
@@ -34,7 +36,7 @@ export class AdminLoginComponent implements OnInit {
       // if not, sign them in
       this.errors = false;
       this.errorMsg = '';
-      this.router.navigate(['/admin/dashboard']);
+      this.router.navigate(['/admin/songs']);
     })
   }
 

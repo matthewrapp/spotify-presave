@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 
 import { Admin } from '../models/admin.model';
 import { AuthService } from './auth.service';
+import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,7 @@ export class AdminService {
   loginAdminResEvent = new Subject<any>();
   response: any = { res: null, status: null }
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
   writeAdmin(newAdmin: Admin): any {
     if (!newAdmin) return
@@ -38,6 +40,14 @@ export class AdminService {
           this.createAdminResEvent.next(this.response);
         } 
       });
+  }
+
+  logoutAdmin() {
+    const cookie = this.authService.getCookie('auth');
+    if (!cookie) return this.router.navigate(['/login']);
+    const rus = this.authService.destroyCookie('auth');
+    console.log('res: ', rus)
+    return this.router.navigate(['/login']);
   }
 
   loginAdmin(email: string, password: string): any {
