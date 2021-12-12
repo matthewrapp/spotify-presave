@@ -69,6 +69,10 @@
         </div>
         <!-- End errors for releaseDate-->
         <!-- SPOTIFY URI-->
+        <div class="mb-3 alert alert-danger" 
+            *ngIf="errors">
+            {{errorMsg}}
+        </div>
         <button type="submit" class="btn btn-success" [disabled]="!createPresaveForm.valid" >{{ editMode ? 'Update Presave' : 'Create Presave' }}</button>
     </form>
 </div>

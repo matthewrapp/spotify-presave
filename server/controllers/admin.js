@@ -61,17 +61,20 @@ exports.writeAdmin = (req, res, next) => {
                 .then(async createdAdmin => {
                     // generate token
                     const token = generateToken(createdAdmin._id, createdAdmin.email);
+
                     // overwrite the temp_token
-                    createdAdmin.token = token;
+                    const update = {
+                        token: token
+                    }
                     // save the new token
-                    await createdAdmin.save();
+                    await createdAdmin.update(update);
                     return createdAdmin
                 })
                 .then(createdAdmin => {
                     Artist.find({ admin: createdAdmin._id })
                         .then(async artists => {
                             if (artists.length > 0) {
-                                const alreadyExists = songs.find(artist => artist.songName === req.body.artistName);
+                                const alreadyExists =  artists.find(artist => artist.artistName === req.body.artistName);
                                 if (alreadyExists) return res.status(300).json({message: 'Artist with same name already exists'});
                             }
 

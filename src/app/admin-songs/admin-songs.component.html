@@ -1,15 +1,18 @@
 <div class="container">
+    <div class="container mt-3 mb-3">
+        <a href="/admin/create-presave" class="btn btn-secondary">Create New Presave</a>
+    </div>
     <div *ngIf="!noSongs; else elseBlock;" class="table-responsive mt-3">
         <table class="table align-middle">
             <thead>
                 <tr>
                     <th style="width: 3%" scope="col">#</th>
                     <th style="width: 5%" scope="col">Artwork</th>
-                    <th style="width: 19%" scope="col">Song Name</th>
-                    <th style="width: 23%" scope="col">Artist Name</th>
-                    <th style="width: 30%" scope="col">Release Date</th>
-                    <th style="width: 10%" scope="col">Presaves</th>
-                    <th style="width: 15%"scope="col">Edit/Delete</th>
+                    <th style="width: 15%" scope="col">Song Name</th>
+                    <!-- <th style="width: 23%" scope="col">Artist Name</th> -->
+                    <th style="width: 35%" scope="col">Release Date</th>
+                    <th style="width: 12%" scope="col">Presaves</th>
+                    <th style="width: 10%"scope="col">Edit/Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,7 +20,7 @@
                     <th scope="row">{{i + 1}}</th>
                     <td class="text-center"><img class="img-fluid w-75"  [src]="song.artworkUrl"></td>
                     <td>{{ song.songName }}</td>
-                    <td>{{ artist.artistName }}</td>
+                    <!-- <td>{{ artist.artistName }}</td> -->
                     <td>{{ song.releaseDate | date: "EEE • MMMM dd, YYYY" }}</td>
                     <td>{{ song.presaved.length }}</td>
                     <td class="">

@@ -16,7 +16,7 @@ export class AdminSongsComponent implements OnInit, OnDestroy {
   faDelete = faTrash;
   songs!: [any]
   artist!: any
-  noSongs!: Boolean;
+  noSongs: Boolean = true;
   getSongsSubscription!: Subscription;
   deleteSongSubscription!: Subscription;
 
@@ -26,25 +26,35 @@ export class AdminSongsComponent implements OnInit, OnDestroy {
     this.getSongs();
   }
 
-  getSongs(): any {
-    this.songService.getSongs();
-    this.getSongsSubscription = this.songService.getSongsResEvent.subscribe(result => {
-      if (result.status !== 200) return;
-      if (result.res.songs.length <= 0) return this.noSongs = true;
-      this.noSongs = false;
-      this.songs = result.res.songs;
-      this.artist = result.res.artist;
-      return
-    })
+  getSongs() {
+    this.getSongsSubscription = this.songService.getSongs()
+      .subscribe({
+        next: resData => {
+          if (resData.songs.length === 0) {
+            this.noSongs = true;
+            this.songs = resData.songs;
+          } else {
+            this.noSongs = false;
+            this.songs = resData.songs;
+          }
+        },
+        error: error => {
+          console.log(error);
+        }
+      })
+
   }
 
   deleteSong(songId: string) {
-    this.songService.deleteSong(songId);
-    this.deleteSongSubscription = this.songService.songDeletedResEvent.subscribe(result => {
-      if (result.status !== 200) return;
-      this.getSongs();
-      return
-    })
+    this.deleteSongSubscription = this.songService.deleteSong(songId)
+      .subscribe({
+        next: resData => {
+          return this.getSongs();
+        },
+        error: error => {
+          console.log(error)
+        }
+      })
   }
 
   ngOnDestroy() {
