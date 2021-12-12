@@ -2,15 +2,16 @@ var mongoose = require('mongoose');
 
 const Song = require('../models/Song');
 const Artist = require('../models/Artist');
-const { ConnectableObservable } = require('rxjs');
 const User = require('../models/User');
 
 // GETTING ALL SONGS FROM DB FOR THE USER
 exports.getSongs = async (req, res, next) => {
+    console.log('getting here.....')
     const songs = await Song.find({ admin: req.user.userId }).then(songs => songs)
         .catch(err => res.status(400).json({ message: 'Songs fetched failed', error: err }));
-
         // res.status(200).json({ message: 'Songs fetched successfully', songs: songs })
+    if (songs.length <= 0) return res.status(300).json({ message: 'No songs yet! Create one!' });
+
     const artist = await Artist.findById(songs[0].artist).catch(err => res.status(400).json({message: 'Failed getting artist info.'}));
     return res.status(200).json({ message: 'Songs fetched successfully', songs: songs, artist: artist })
 };

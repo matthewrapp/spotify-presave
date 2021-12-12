@@ -26,7 +26,7 @@ export class AdminSongsComponent implements OnInit, OnDestroy {
     this.getSongs();
   }
 
-  getSongs(): any {
+  getSongs() {
     this.songService.getSongs();
     this.getSongsSubscription = this.songService.getSongsResEvent.subscribe(result => {
       if (result.status !== 200) return;

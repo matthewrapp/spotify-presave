@@ -85,8 +85,9 @@ export class AdminCreatePresaveComponent implements OnInit, OnDestroy {
   }
 
   submitPresave() {
-    const { songName, releaseDate, artworkUrl, spotifyUri, artist } = this.createPresaveForm.value;
-    const presave = new Song(songName, releaseDate, artworkUrl ? artworkUrl : '', spotifyUri, artist);
+    console.log(this.createPresaveForm.value);
+    const { songName, releaseDate, artworkUrl, spotifyUri, artistId } = this.createPresaveForm.value;
+    const presave = new Song(songName, releaseDate, artworkUrl ? artworkUrl : '', spotifyUri, artistId);
 
     this.songService.writePresave(presave);
 

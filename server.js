@@ -27,7 +27,6 @@ app.use(cookieParser());
 app.use(logger('dev')); // Tell express to use the Morgan logger
 
 // Add support for CORS
-
 app.use((req, res, next) => {
   const whitelist = ['http://localhost:4200', 'http://localhost:3000', 'https://accounts.spotify.com']
   const origin = req.headers.origin;
@@ -64,6 +63,12 @@ app.use((req, res, next) => {
 // root directory for your web site
 app.use(express.static(path.join(__dirname, 'dist/sp')));
 
+app.use((req, res, next) => {
+  console.log(req.headers)
+  next();
+})
+
+
 // ... ADD YOUR CODE TO MAP YOUR URL'S TO ROUTING FILES HERE ...
 app.use(userRoutes);
 app.use(adminRoutes);
@@ -81,9 +86,9 @@ mongoose.connect('mongodb://localhost:27017/spotify-presave', {useNewUrlParser :
 });
 
 // Tell express to map all other non-defined routes back to the index page
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'dist/sp/index.html'));
-// });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/sp/index.html'));
+});
 
 // Define the port address and tell express to use this port
 const port = process.env.PORT;

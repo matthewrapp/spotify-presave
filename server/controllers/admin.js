@@ -70,6 +70,7 @@ exports.writeAdmin = (req, res, next) => {
                 .then(createdAdmin => {
                     Artist.find({ admin: createdAdmin._id })
                         .then(async artists => {
+                            console.log(artists)
                             if (artists.length > 0) {
                                 const alreadyExists = songs.find(artist => artist.songName === req.body.artistName);
                                 if (alreadyExists) return res.status(300).json({message: 'Artist with same name already exists'});

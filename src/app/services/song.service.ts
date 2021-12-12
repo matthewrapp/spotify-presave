@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import {HttpClient, HttpHeaderResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
@@ -26,11 +26,12 @@ export class SongService implements OnInit {
       
     }
     
-    getSongs(): any {
+    async getSongs() {
         const authToken = this.authService.getCookie('auth');
-        const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`})
-
-        this.http.get<any>(`${environment.apiUrl}/songs`, { headers: headers,  withCredentials: true  })
+        const headers =  new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
+        console.log('HEADERS: ', headers)
+        // this.http.post<any>(`${environment.apiUrl}/create-presave`, newSong, { headers: headers, withCredentials: true})
+        this.http.get<any>(`${environment.apiUrl}/songs`, { headers: headers, withCredentials: true})
             .subscribe({
                 next: resData => {
                     this.response.res = resData;
@@ -38,6 +39,7 @@ export class SongService implements OnInit {
                     this.getSongsResEvent.next(this.response);
                 },
                 error: error => {
+                    console.log(error)
                     this.response.res = error;
                     this.response.status = error.status;
                     this.getSongsResEvent.next(this.response);
@@ -49,7 +51,8 @@ export class SongService implements OnInit {
         const authToken = this.authService.getCookie('auth');
         const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
 
-        this.http.get<any>(`${environment.apiUrl}/songs/${songId}`, { headers: headers,  withCredentials: true  })
+        // this.http.post<any>(`${environment.apiUrl}/create-presave`, newSong, { headers: headers, withCredentials: true})
+        this.http.get<any>(`${environment.apiUrl}/songs/${songId}`, { headers: headers, withCredentials: true})
             .subscribe({
                 next: resData => {
                     this.response.res = resData;
