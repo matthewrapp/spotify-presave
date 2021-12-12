@@ -85,23 +85,18 @@ export class AdminCreatePresaveComponent implements OnInit, OnDestroy {
   }
 
   submitPresave() {
-    console.log(this.createPresaveForm.value);
     const { songName, releaseDate, artworkUrl, spotifyUri, artistId } = this.createPresaveForm.value;
     const presave = new Song(songName, releaseDate, artworkUrl ? artworkUrl : '', spotifyUri, artistId);
 
-    this.songService.writePresave(presave);
-
-    this.presaveCreatedSubscrition = this.songService.presaveCreateResEvent.subscribe(result => {
-        if (result.status !== 200) {
-          this.errors = true;
-          this.errorMsg = result.res.error.message;
-          return
-        }
-        // if not, redirect to login
-        this.errors = false;
-        this.errorMsg = '';
-        this.router.navigate(['/admin/songs'])
-    })
+    this.songService.writePresave(presave)?.subscribe(result => {
+      if (!result.song)  {
+        this.errors = true;
+        this.errorMsg = result.message;
+      }
+      this.errors = false;
+      this.errorMsg = '';
+      return this.router.navigate(['/admin/songs']);
+    });
   }
 
   ngOnDestroy(): void {

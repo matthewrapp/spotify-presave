@@ -17,6 +17,7 @@ const generateToken = (userId, userLastName) => {
 // }
 
 const verifyAuth = (req, res, next) => {
+    console.log('GETTIMG JERE')
     let token;
     if (req.headers.authorization !== undefined) {
         token = req.headers.authorization.split(' ')[1];

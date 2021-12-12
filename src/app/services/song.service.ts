@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
@@ -12,7 +12,6 @@ import { Song } from '../models/song.model';
   providedIn: 'root'
 })
 export class SongService implements OnInit {
-    getSongsResEvent = new Subject<any>();
     getSongResEvent = new Subject<any>();
     presaveCreateResEvent = new Subject<any>();
     presaveUpdatedResEvent = new Subject<any>();
@@ -26,25 +25,25 @@ export class SongService implements OnInit {
       
     }
     
-    async getSongs() {
+    getSongs(): Observable<any> {
         const authToken = this.authService.getCookie('auth');
+
         const headers =  new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
-        console.log('HEADERS: ', headers)
-        // this.http.post<any>(`${environment.apiUrl}/create-presave`, newSong, { headers: headers, withCredentials: true})
-        this.http.get<any>(`${environment.apiUrl}/songs`, { headers: headers, withCredentials: true})
-            .subscribe({
-                next: resData => {
-                    this.response.res = resData;
-                    this.response.status = 200;
-                    this.getSongsResEvent.next(this.response);
-                },
-                error: error => {
-                    console.log(error)
-                    this.response.res = error;
-                    this.response.status = error.status;
-                    this.getSongsResEvent.next(this.response);
-                }
-            })
+        return this.http.get<any>(`${environment.apiUrl}/songs`, { headers: headers, withCredentials: true});
+
+        // this.http.get<any>(`${environment.apiUrl}/songs`, { headers: headers, withCredentials: true})
+        //     .subscribe({
+        //         next: resData => {
+        //             this.response.res = resData;
+        //             this.response.status = 200;
+        //             this.getSongsResEvent.next(this.response);
+        //         },
+        //         error: error => {
+        //             this.response.res = error;
+        //             this.response.status = error.status;
+        //             this.getSongsResEvent.next(this.response);
+        //         }
+        //     })
     }
 
     getSong(songId: string) {
@@ -129,19 +128,19 @@ export class SongService implements OnInit {
         const authToken = this.authService.getCookie('auth');
 
         const headers =  new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
-        this.http.post<any>(`${environment.apiUrl}/create-presave`, newSong, { headers: headers, withCredentials: true})
-            .subscribe({
-                next: resData => {
-                    this.response.res = resData;
-                    this.response.status = 200;
-                    this.presaveCreateResEvent.next(this.response);
-                },
-                error: error => {
-                    this.response.res = error;
-                    this.response.status = error.status;
-                    this.presaveCreateResEvent.next(this.response);
-                }
-            })
+        return this.http.post<any>(`${environment.apiUrl}/create-presave`, newSong, { headers: headers, withCredentials: true})
+            // .subscribe({
+            //     next: resData => {
+            //         this.response.res = resData;
+            //         this.response.status = 200;
+            //         this.presaveCreateResEvent.next(this.response);
+            //     },
+            //     error: error => {
+            //         this.response.res = error;
+            //         this.response.status = error.status;
+            //         this.presaveCreateResEvent.next(this.response);
+            //     }
+            // })
     }
 
 }

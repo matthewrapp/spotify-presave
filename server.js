@@ -63,12 +63,6 @@ app.use((req, res, next) => {
 // root directory for your web site
 app.use(express.static(path.join(__dirname, 'dist/sp')));
 
-app.use((req, res, next) => {
-  console.log(req.headers)
-  next();
-})
-
-
 // ... ADD YOUR CODE TO MAP YOUR URL'S TO ROUTING FILES HERE ...
 app.use(userRoutes);
 app.use(adminRoutes);

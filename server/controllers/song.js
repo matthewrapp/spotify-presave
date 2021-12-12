@@ -6,13 +6,11 @@ const User = require('../models/User');
 
 // GETTING ALL SONGS FROM DB FOR THE USER
 exports.getSongs = async (req, res, next) => {
-    console.log('getting here.....')
-    const songs = await Song.find({ admin: req.user.userId }).then(songs => songs)
-        .catch(err => res.status(400).json({ message: 'Songs fetched failed', error: err }));
+    const songs = await Song.find({ admin: req.user.userId }).catch(err => res.status(400).json({ message: 'Songs fetched failed', error: err }));
         // res.status(200).json({ message: 'Songs fetched successfully', songs: songs })
-    if (songs.length <= 0) return res.status(300).json({ message: 'No songs yet! Create one!' });
+    if (songs.length === 0) return res.status(300).json({ message: 'No songs yet! Create one!', songs: [] });
 
-    const artist = await Artist.findById(songs[0].artist).catch(err => res.status(400).json({message: 'Failed getting artist info.'}));
+    const artist = await Artist.findById(songs[0].artist).catch(err => res.status(400).json({message: 'Failed getting artist info.', error: err}));
     return res.status(200).json({ message: 'Songs fetched successfully', songs: songs, artist: artist })
 };
 
