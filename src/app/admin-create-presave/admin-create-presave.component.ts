@@ -71,32 +71,35 @@ export class AdminCreatePresaveComponent implements OnInit, OnDestroy {
     const presave = new Song(songName, releaseDate, artworkUrl ? artworkUrl : '', spotifyUri, artist);
 
     this.songService.updatePresave(presave, this.songToEdit._id);
-    this.presaveUpdatedSubscription = this.songService.presaveUpdatedResEvent.subscribe(result => {
-      if (result.status !== 200) {
-        this.errors = true;
-        this.errorMsg = result.res.error.message;
-        return
-      }
-
-      this.errors = false;
-      this.errorMsg = '';
-      this.router.navigate(['/admin/songs']);
-    })
+    this.presaveUpdatedSubscription = this.songService.updatePresave(presave, this.songToEdit._id)
+      .subscribe({
+        next: resData => {
+          this.errors = false;
+          this.errorMsg = '';
+          this.router.navigate(['/admin/songs']);
+        },
+        error: error => {
+          this.errors = true;
+          this.errorMsg = error.error.message;
+        }
+      })
   }
 
   submitPresave() {
     const { songName, releaseDate, artworkUrl, spotifyUri, artistId } = this.createPresaveForm.value;
     const presave = new Song(songName, releaseDate, artworkUrl ? artworkUrl : '', spotifyUri, artistId);
-
-    this.songService.writePresave(presave)?.subscribe(result => {
-      if (!result.song)  {
-        this.errors = true;
-        this.errorMsg = result.message;
-      }
-      this.errors = false;
-      this.errorMsg = '';
-      return this.router.navigate(['/admin/songs']);
-    });
+    this.presaveCreatedSubscrition = this.songService.writePresave(presave)
+      .subscribe({
+        next: resData => {
+          this.errors = false;
+          this.errorMsg = '';
+          this.router.navigate(['/admin/songs']);
+        },
+        error: error => {
+          this.errors = true;
+          this.errorMsg = error.error.message;
+        }
+      })
   }
 
   ngOnDestroy(): void {

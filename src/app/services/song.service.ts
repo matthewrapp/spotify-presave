@@ -83,64 +83,22 @@ export class SongService implements OnInit {
             })
     }
 
-    deleteSong(songId: string) {
-        if (!songId) return;
+    deleteSong(songId: string): Observable<any> {
         const authToken = this.authService.getCookie('auth');
         const headers =  new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
-
-        this.http.delete<any>(`${environment.apiUrl}/songs/${songId}`, {headers: headers} )
-            .subscribe({
-                next: resData => {
-                    this.response.res = resData;
-                    this.response.status = 200;
-                    this.songDeletedResEvent.next(this.response);
-                },
-                error: error => {
-                    this.response.res = error;
-                    this.response.status = error.status;
-                    this.songDeletedResEvent.next(this.response);
-                }
-            })
+        return this.http.delete<any>(`${environment.apiUrl}/songs/${songId}`, {headers: headers} )
     }
 
-    updatePresave(songToUpdate: Song, songId: string) {
-        if (!songToUpdate) return;
+    updatePresave(songToUpdate: Song, songId: string): Observable<any>  {
         const authToken = this.authService.getCookie('auth');
         const headers =  new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
-
-        this.http.put<any>(`${environment.apiUrl}/songs/${songId}`, songToUpdate, { headers: headers})
-            .subscribe({
-                next: resData => {
-                    this.response.res = resData;
-                    this.response.status = 200;
-                    this.presaveUpdatedResEvent.next(this.response);
-                },
-                error: error => {
-                    this.response.res = error;
-                    this.response.status = error.status;
-                    this.presaveUpdatedResEvent.next(this.response);
-                }
-            })
+        return this.http.put<any>(`${environment.apiUrl}/songs/${songId}`, songToUpdate, { headers: headers});
     }
 
-    writePresave(newSong: Song) {
-        if (!newSong) return;
+    writePresave(newSong: Song): Observable<any> {
         const authToken = this.authService.getCookie('auth');
-
         const headers =  new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}`});
         return this.http.post<any>(`${environment.apiUrl}/create-presave`, newSong, { headers: headers, withCredentials: true})
-            // .subscribe({
-            //     next: resData => {
-            //         this.response.res = resData;
-            //         this.response.status = 200;
-            //         this.presaveCreateResEvent.next(this.response);
-            //     },
-            //     error: error => {
-            //         this.response.res = error;
-            //         this.response.status = error.status;
-            //         this.presaveCreateResEvent.next(this.response);
-            //     }
-            // })
     }
 
 }

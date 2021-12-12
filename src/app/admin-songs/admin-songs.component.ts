@@ -27,24 +27,34 @@ export class AdminSongsComponent implements OnInit, OnDestroy {
   }
 
   getSongs() {
-    this.getSongsSubscription = this.songService.getSongs().subscribe(result => {
-      if (result.songs === []) return this.noSongs = true;
-      this.noSongs = false;
-      this.songs = result.songs;
-      this.artist = result.artist;
-      return
-    });
+    this.getSongsSubscription = this.songService.getSongs()
+      .subscribe({
+        next: resData => {
+          if (resData.songs.length === 0) {
+            this.noSongs = true;
+            this.songs = resData.songs;
+          } else {
+            this.noSongs = false;
+            this.songs = resData.songs;
+          }
+        },
+        error: error => {
+          console.log(error);
+        }
+      })
+
   }
 
   deleteSong(songId: string) {
-    // this.deleteSongSubscription = this.songService.deleteSong(songId).subscribe(result => {
-      
-    // });
-    this.deleteSongSubscription = this.songService.songDeletedResEvent.subscribe(result => {
-      if (result.status !== 200) return;
-      this.getSongs();
-      return
-    })
+    this.deleteSongSubscription = this.songService.deleteSong(songId)
+      .subscribe({
+        next: resData => {
+          return this.getSongs();
+        },
+        error: error => {
+          console.log(error)
+        }
+      })
   }
 
   ngOnDestroy() {
